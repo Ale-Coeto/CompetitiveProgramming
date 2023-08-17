@@ -1,0 +1,89 @@
+#include <algorithm>
+#include <bitset>
+#include <cmath>
+#include <cstdio>
+#include <cstring>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <limits.h>
+#include <map>
+#include <math.h>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <utility>
+#include <vector>
+ 
+#define PI 3.141592653589793
+#define EPS 0.000000001
+#define INF 1000000000
+ 
+#define _ ios_base::sync_with_stdio(0), cin.tie(0), cin.tie(0), cout.tie(0), cout.precision(15);
+#define FOR(i, a, b) for(int i=int(a); i<int(b); i++)
+#define RFOR(i, a, b) for(int i=int(a)-1; i>=int(b); i--)
+#define FORC(cont, it) for(typeof((cont).begin()) it = (cont).begin(); it != (cont).end(); it++)
+#define RFORC(cont, it) for(typeof((cont).rbegin()) it = (cont).rbegin(); it != (cont).rend(); it++)
+#define pb push_back
+ 
+using namespace std;
+ 
+typedef long long ll;
+typedef pair<int, int> ii;
+typedef vector<int> vi;
+typedef vector<ii> vii;
+ 
+#define MAXN 10
+#define MOD 1000000007
+ bool dp[1005][1005];
+ bool isValid(string s, int i, int j) {
+        if (s[i] == s[j]) {
+            if (j-i == 1) return true;
+            else if (dp[i+1][j-1]) return true;
+        }
+        return false;
+    }
+
+    string longestPalindrome(string s) {
+        int ansI = 0;
+        int ansJ = 0;
+
+        for (int i = s.length()-1; i >= 0 ; i--) {
+            for (int j = i; j < s.length(); j++) {
+                dp[i][j] = (i == j) ? true : isValid(s,i,j);
+                if (dp[i][j] && j-i > ansJ-ansI) {
+                    ansI = i;
+                    ansJ = j;
+                }
+            }
+        }
+
+        return s.substr(ansI, abs(ansJ-ansI)+1);
+        
+    }
+
+    
+
+int main() { _
+    string s = "babad";
+    cout << longestPalindrome(s) << endl;
+
+    for (int i = 0; i < s.length(); i++) {
+        for (int k = 0; k < i; k++)
+        cout << "0 ";
+
+        for (int j = i; j < s.length(); j++) {
+            cout << dp[i][j] << " ";
+        }
+        cout << endl;
+    }
+ 
+return 0;
+}

@@ -42,18 +42,50 @@ typedef vector<ii> vii;
  
 #define MAXN 10
 #define MOD 1000000007
- 
+
+vector<int> temp;
+
+    void print() {
+        for (auto i : temp) {
+            cout << i << " ";
+        }
+
+        cout << endl;
+    }
+
+        void bt(int index, vector<int> &nums, vector<vector<int>> &solution) {
+        solution.push_back(temp);
+        print();
+
+        if (temp.size() == nums.size()) return;
+   
+        for (int i = index; i < nums.size(); i++) {
+            temp.push_back(nums[i]);
+            bt(i + 1, nums, solution);
+            temp.erase(temp.begin() + temp.size() - 1);
+        }
+
+        return;
+
+    }
+
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int> > solution;
+        solution.push_back({});
+        bt(0,nums, solution);
+
+
+        return solution;
+    }
+
+
+
+
+
 int main() { _
-    int r, p;
-    int arr[2] = {10,1};
+vector<int> nums{1,2,3};
 
-    vector<int> uno {1,2,4,4,4,10};
-    int x = upper_bound(uno.begin(), uno.end(), 4) - uno.begin() - 1;
-
-    bitset<10> bits;
-    bits[0] = 1;
-
-    cout << "test " << x;
+subsets(nums);
  
 return 0;
 }

@@ -9,6 +9,12 @@ public class Java {
         uno.add(1);
         Collections.sort(uno, Collections.reverseOrder());
 
+        Deque<Integer> dq = new ArrayDeque<>();
+        dq.addFirst(0);
+        dq.addLast(1);
+        dq.removeFirst();
+        dq.removeLast();
+        
         //Read input
         Scanner scan = new Scanner(System.in);
         int n;
