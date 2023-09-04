@@ -43,63 +43,73 @@ typedef vector<ii> vii;
 #define MAXN 1000005
 #define MOD 1000000007
 
-int n,m;
-vector<u_int64_t> graph[MAXN];
-vi visited(MAXN,-1);
-int num = 1;
- 
-string bfs(u_int64_t u) {
-    visited[u] = 0;
-    queue<int> q;
-    q.push(u);
+vi graph[MAXN];
+vi parent(MAXN,-1);
+bool flag = false;
 
-    
-    while(!q.empty()) {
-        int f = q.front();
-        q.pop();
+void printSol(int u, int target) {
+    if (flag) return;
+    stack<int> s;
+    s.push(target);
+    while (u != target) {
+        if (u == parent[u]) break;
+        s.push(u);
+        u = parent[u];
+    }
+    s.push(u);
+    cout << s.size() << endl;
 
-        for (int i = 0; i < (int)graph[f].size(); i++) {
-            if (visited[f] == visited[graph[f][i]]) 
-                return "IMPOSSIBLE";
+    while(!s.empty()) {
+        cout << s.top() << " ";
+        s.pop();
+    }
+}
 
-            if (visited[graph[f][i]] == -1) {
-                visited[graph[f][i]] = 1 - visited[f];
-                q.push(graph[f][i]);
-                
-            } 
+bool dfs(int u) {
+    if (flag) return true;
+    for (int i = 0; i < graph[u].size(); i++) {
+        
+        if (parent[graph[u][i]] == -1) {
+            parent[graph[u][i]] = u;
+            dfs(graph[u][i]);
+        }
+
+        else if (parent[u] != graph[u][i] && parent[u] != u){
+            printSol(u,graph[u][i]);
+            return flag = true;
         }
     }
 
-    return "";
-
+    return false;
 }
 
+
+
 int main() { _
+    int n, m;
     cin >> n >> m;
 
     while (m--) {
-        u_int64_t a,b;
+        int a,b;
         cin >> a >> b;
         graph[a].pb(b);
         graph[b].pb(a);
-
     }
 
-    string res;
-    for (int i = 1; i <= n; i++) {
-        if (visited[i] == -1) {
-            res = bfs(i);
-            if (res == "IMPOSSIBLE") {
-                cout << res;
-                return 0;
-            }
+  
+
+    for (int i = 2; i < n; i++) {
+        if (parent[i] == -1) {
+            parent[i] = i;
+            dfs(i);
+            if (flag) break;
+
         }
     }
 
-    for (int i = 1; i <= n; i++) {
-        int n = visited[i];
-        cout << ((n >= 1) ? 1 : 2) << " ";
-    }
+    if (!flag) 
+        cout << "IMPOSSIBLE";
+
 
     return 0;
 }

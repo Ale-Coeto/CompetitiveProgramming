@@ -43,63 +43,49 @@ typedef vector<ii> vii;
 #define MAXN 1000005
 #define MOD 1000000007
 
-int n,m;
-vector<u_int64_t> graph[MAXN];
-vi visited(MAXN,-1);
-int num = 1;
- 
-string bfs(u_int64_t u) {
-    visited[u] = 0;
-    queue<int> q;
-    q.push(u);
+vector<ii> graph[MAXN];
 
+void dijkstra(int V, int s) {
+	vi dist(V+1, INF); dist[s] = 0; // INF = 1B to avoid overflow 
+	priority_queue<ii, vector<ii>, greater<ii> > pq;
+    pq.push(ii(0, s)); 
     
-    while(!q.empty()) {
-        int f = q.front();
-        q.pop();
-
-        for (int i = 0; i < (int)graph[f].size(); i++) {
-            if (visited[f] == visited[graph[f][i]]) 
-                return "IMPOSSIBLE";
-
-            if (visited[graph[f][i]] == -1) {
-                visited[graph[f][i]] = 1 - visited[f];
-                q.push(graph[f][i]);
-                
-            } 
-        }
+    while (!pq.empty()) { // main loop
+	    ii front = pq.top(); 
+        pq.pop(); // greedy: get shortest unvisited vertex 
+	    int d = front.first, u = front.second;
+	    
+        if (d > dist[u]) continue; // this is a very important check 
+	    for (int j = 0; j < (int)graph[u].size(); j++) {
+	        ii v = graph[u][j]; // all outgoing edges from u 
+	        
+            if (dist[u] + v.second < dist[v.first]) {
+	            dist[v.first] = dist[u] + v.second; // relax operation
+	            pq.push(ii(dist[v.first], v.first));
+	        } 
+        } 
+    } 
+    // this variant can cause duplicate items in the priority queue
+    for (int i = 1; i < V+1; i++) {
+        cout << dist[i] << " ";
     }
-
-    return "";
-
 }
 
 int main() { _
+
+    int n, m;
     cin >> n >> m;
 
     while (m--) {
-        u_int64_t a,b;
-        cin >> a >> b;
-        graph[a].pb(b);
-        graph[b].pb(a);
-
+        int a,b,c;
+        cin >> a >> b >> c;
+        graph[a].pb({b,c});
+        graph[b].pb({a,c});
     }
 
-    string res;
-    for (int i = 1; i <= n; i++) {
-        if (visited[i] == -1) {
-            res = bfs(i);
-            if (res == "IMPOSSIBLE") {
-                cout << res;
-                return 0;
-            }
-        }
-    }
+    dijkstra(n,1);
 
-    for (int i = 1; i <= n; i++) {
-        int n = visited[i];
-        cout << ((n >= 1) ? 1 : 2) << " ";
-    }
+
 
     return 0;
 }
