@@ -43,18 +43,14 @@ typedef vector<ii> vii;
 #define MAXN 10
 #define MOD 1000000007
 
+
+
+
+//Para adj list
 vector<vector<int> > graph(10000);
 vi visited(100001,-1);
 
-int grid[10000][10000];
 
-
-
-vii moves = {{0,1},{0,-1},{1,0},{-1,0}};
-int n,m = 0;
-int ans = 0;
-
-//Para adj list
 void dfs(int u) {
     visited[u] = 1;
     for (int i = 0; i < (int)graph[u].size(); i++) {
@@ -64,16 +60,19 @@ void dfs(int u) {
 
 }
 
+//Para grid
+int grid[10000][10000];
+vii moves = {{0,1},{0,-1},{1,0},{-1,0}};
+int n,m = 0;
+int ans = 0;
+
+
 //Verificar movimientos
-bool valid(int x, int y) {
-    if (x < 0 || y < 0 || x >= n || y >= m)
-        return false;
-    if (grid[x][y] == 1)
-        return false;
-    return true;
+inline bool valid(int x, int y) {
+    return (x >= 0 && y >= 0 && x < n && y < m && grid[x][y] != 1);
 }
 
-//Para grid
+//DFS en grid
 void dfs(int x, int y) {
     grid[x][y] = 1;
 
@@ -88,21 +87,20 @@ void dfs(int x, int y) {
 }
 
 int main() { _  
-    // Para recibir nodos y edges
-    // cin >> n >> m;
+    //Para recibir nodos y edges
+    cin >> n >> m;
 
-    // for (int i = 0; i < m; i++) {
-    //     int a,b;
-    //     cin >> a >> b;
-    //     graph[a].pb(b);
-    // }
+    for (int i = 0; i < m; i++) {
+        int a,b;
+        cin >> a >> b;
+        graph[a].pb(b);
+    }
     
-    // dfs(4);
-
 
     //Para recibir grids
     cin >> n >> m;
     
+    //De caracteres
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++){
             char a;
@@ -111,6 +109,7 @@ int main() { _
         }
     }
 
+    //Numéricos
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++){
             if (grid[i][j] == -1) {

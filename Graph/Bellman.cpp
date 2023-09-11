@@ -40,52 +40,43 @@ typedef pair<int, int> ii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
  
-#define MAXN 100000
+#define MAXN 10
 #define MOD 1000000007
- 
-stack<int> topoSort;
-vi graph[MAXN];
-vi visited(MAXN,-1);
 
-//To print elements in a DAG(directed acyclical graph) in order 
-void dfs2(int u) {
-    visited[u] = 1;
+vector<vii> graph;
+vi dist; 
+//Dijkstra for neg nums
+int bellmanFord(int V,int s) {
+    
+    for (int i = 0; i < V - 1; i++) // relax all E edges V-1 times
+        for (int u = 0; u < V; u++) // these two loops = O(E), overall O(VE) 
+            for (int j = 0; j < (int)graph[u].size(); j++) {
+                ii v = graph[u][j]; // record SP spanning here if needed
+                dist[v.first] = min(dist[v.first], dist[u] + v.second); // relax 
+            }
+}
 
-    for (int i = 0; i < graph[u].size(); i++) {
-        if (visited[graph[u][i]] == -1) 
-            dfs2(graph[u][i]);
-    }
-
-    topoSort.push(u);
+bool checkNegativeCycles(int V) {
+    bool hasNegativeCycle = false;
+    for (int u = 0; u < V; u++) // one more pass to check
+        for (int j = 0; j < (int)graph[u].size(); j++) {
+            ii v = graph[u][j];
+            if (dist[v.first] > dist[u] + v.second) // if this is still possible
+                hasNegativeCycle = true; // then negative cycle exists! 
+        }
+    printf("Negative Cycle Exist? %s\n", hasNegativeCycle ? "Yes" : "No");
 }
 
 int main() { _
-    int n,m;
-    cin >> n >> m;
-  
-    //Input
-    for (int i = 0; i < m; i++) {
-        int a,b;
-        cin >> a >> b;
-        graph[a].pb(b);
-    }
 
-    //Traversal
-    for (int i = 0; i < n; i++) {
-        if (visited[i] == -1) {
-            dfs2(i);
-            cout << i << endl;
-        }
-    }
+    int V;
+    cin >> V;
 
-    //Print
-    while (!topoSort.empty()) {
-        cout << topoSort.top() << " ";
-        topoSort.pop();
-    }
+    dist.assign(V, INF);
+    int s = 1;
+    dist[s] = 0;
+    
 
 
-return 0;
-
-
+    return 0;
 }

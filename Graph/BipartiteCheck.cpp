@@ -40,52 +40,38 @@ typedef pair<int, int> ii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
  
-#define MAXN 100000
+#define MAXN 10000
 #define MOD 1000000007
+
+vector<vii> graph(MAXN);
  
-stack<int> topoSort;
-vi graph[MAXN];
-vi visited(MAXN,-1);
+bool isBipartite(int n) {
+    queue<int> q; 
+    q.push(n);
+    vi color(MAXN, INF); 
+    color[n] = 0;
 
-//To print elements in a DAG(directed acyclical graph) in order 
-void dfs2(int u) {
-    visited[u] = 1;
+    bool isBipartite = true;
+    int u = q.front(); 
+    q.pop();
 
-    for (int i = 0; i < graph[u].size(); i++) {
-        if (visited[graph[u][i]] == -1) 
-            dfs2(graph[u][i]);
-    }
+    for (int j = 0; j < (int)graph[u].size(); j++) {
+        ii v = graph[u][j];
+        if (color[v.first] == INF) { 
+            color[v.first] = 1 - color[u]; 
+            q.push(v.first);
+        }
 
-    topoSort.push(u);
+        else if (color[v.first] == color[u]) {
+            isBipartite = false; 
+            break; 
+        }
+ 
+    }  
 }
 
 int main() { _
-    int n,m;
-    cin >> n >> m;
-  
-    //Input
-    for (int i = 0; i < m; i++) {
-        int a,b;
-        cin >> a >> b;
-        graph[a].pb(b);
-    }
-
-    //Traversal
-    for (int i = 0; i < n; i++) {
-        if (visited[i] == -1) {
-            dfs2(i);
-            cout << i << endl;
-        }
-    }
-
-    //Print
-    while (!topoSort.empty()) {
-        cout << topoSort.top() << " ";
-        topoSort.pop();
-    }
 
 
-return 0;
-
-
+    return 0;
 }

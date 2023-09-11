@@ -52,7 +52,6 @@ queue<int> pq;
 void bfs(int u) {
     visited[u] = 0;
 
-    int loops = 0;
     while (!pq.empty()) {
         int front = pq.front();
         pq.pop();
@@ -64,11 +63,9 @@ void bfs(int u) {
                 visited[num] = visited[front] + 1;
             }
         }
-        loops++;
         
     }
     
-//retornar numero de loops para encontrar el tamaño del path a un nodo
 }
 
 int main() { _

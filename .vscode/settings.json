@@ -3,6 +3,9 @@
         "queue": "cpp",
         "iostream": "cpp",
         "stack": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "regex": "cpp",
+        "span": "cpp",
+        "iosfwd": "cpp"
     }
 }
