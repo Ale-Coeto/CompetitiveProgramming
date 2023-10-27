@@ -44,7 +44,28 @@ typedef vector<ii> vii;
 #define MOD 1000000007
  
 int main() { _
+    int a, b;
+    char nada, s;
+   //while (cin >> s) {
+        while (nada != '&') {
+            cin >> nada >> s;
+            cin >> nada >> a;
+            cin >> nada;
+            
 
+            if (s == '>') {
+                cout << a;
+            } else {
+
+            }
+            cout << nada;
+
+
+            //cout << s << ", ";
+        }   
+    //}
+    
+    
     return 0;
 }
 

@@ -43,59 +43,36 @@ typedef vector<ii> vii;
 #define MAXN 10
 #define MOD 1000000007
  
-ll _sieve_size; 
-bitset<10000010> bs; 
-vi primes;
-
-void sieve(ll upperbound) { 
-    _sieve_size = upperbound + 1; 
-    bs.set(); 
-    bs[0] = bs[1] = 0; 
-    for (ll i = 2; i <= _sieve_size; i++) 
-        if (bs[i]) {
-            for (ll j = i * i; j <= _sieve_size; j += i)
-                bs[j] = 0;
-            primes.push_back((int)i); 
-        } 
-}
-
-bool isPrime(ll N) { 
-    if (N <= _sieve_size) 
-        return bs[N]; 
-
-    for (int i = 0; i < (int)primes.size(); i++)
-        if (N % primes[i] == 0) return false;
-
-    return true; 
-}
-
-vi primeFactors(ll N) { 
-    vi factors;
-    ll PF_idx = 0, PF = primes[PF_idx]; 
-    while (PF * PF <= N) { 
-        while (N % PF == 0) {
-            N /= PF; factors.push_back(PF); 
-        } 
-        PF = primes[++PF_idx];
-    }
-
-    if (N != 1) 
-        factors.push_back(N); 
-    return factors; 
-}
-
-
 int main() { _
-    sieve(41);
-    for (int i : primes) {
-        cout << i << " ";
-    }
-    // cout << isPrime(21474836472) << endl;
+    int x;
+    cin >> x;
+    stack<int> stack;
+    string line;
+    int num;
+    int out = 1;
+    cin >> line;
+    cin >> num;
 
-    // vi r = primeFactors(142391208960LL);
-    // for (vi::iterator i = r.begin(); i != r.end(); i++) 
-    //     cout << *i << " ";
+    stack.push(num);    
+    int n = 2*x;
+    for (int i = 1; i < n; i++) {
+        cin >> line;
+        cin >> num;
+
+        if (line[0] == 'i') {
+            cout << num << " " << stack.top() << endl;
+            out++;
+
+            if (out == x){
+                return 0;
+            }
+
+            stack.push(num);
+        } else {
+            stack.pop();
+        }
         
- 
-return 0;
+    }
+
+    return 0;
 }
