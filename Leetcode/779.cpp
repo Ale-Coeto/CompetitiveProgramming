@@ -27,13 +27,13 @@ int kthGrammar(int n, int k) {
         }
 
         cout << start;
-        return (start[0] == 0) ? "0" : "1";
+        return (start[k-1] == '0') ? 0 : 1;
 
         // return -1;
     }
 
 int main() { 
-    kthGrammar(2,1);
+    kthGrammar(30,434991989);
     return 0;
 }
     
