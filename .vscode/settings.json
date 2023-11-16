@@ -6,6 +6,7 @@
         "vector": "cpp",
         "regex": "cpp",
         "span": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "unordered_set": "cpp"
     }
 }
