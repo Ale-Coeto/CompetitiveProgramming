@@ -54,12 +54,12 @@ string txt;
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
         if (!root) {
-            //txt += "n";
+            txt += "n";
             return "n";
         }
 
-        serialize(root->left);
         txt = txt + "s" + std::to_string(root->val) + "e";
+        serialize(root->left);
         serialize(root->right);
 
         return txt;
@@ -116,7 +116,7 @@ string txt;
 
         toVec(data);
         TreeNode* head = new TreeNode(1);
-        fill(head, 1);
+        // fill(head, 1);
 
         for (int i : d) {
             cout << i << " ";
@@ -126,19 +126,45 @@ string txt;
 
     }
 
-    
+void traverse(TreeNode* root, int pIndex) {
+        if (!root) {
+            txt += 'n';
+            return;
+        }
 
+        txt += to_string(root->val);
+        traverse(root->left, pIndex*2);
+        traverse(root->right, pIndex*2+1);
+    }
+
+    
+// string serialize(TreeNode* root) {
+//        txt = string()
+//        traverse(root, 1);
+
+//        return txt;
+//     }
+
+    
     
 
 int main() { _
 
+//    1
+//   2 3
+// . 4 . .
+//1 2 n 4 3 n n
 TreeNode* head = new TreeNode(1);
 head->left = new TreeNode(2);
 head->right = new TreeNode(3);
 head->left->right = new TreeNode(4);
 
 cout << serialize(head) << endl;
+toVec(serialize(head));
 
+for (int i : d) {
+    cout << i << " ";
+}
 // TreeNode* n = deserialize(serialize(head));
 // cout << "\nhead: " << n->val;
 // cout << "\nleft: " << n->left->val;
