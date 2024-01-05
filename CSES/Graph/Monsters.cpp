@@ -42,7 +42,9 @@ typedef vector<ii> vii;
  
 #define MAXN 10
 #define MOD 1000000007
-vector<char> dir = {'U','D','R','L'};
+vector<char> dir = {'R','L','D','U'};
+map<char,ii> rev;
+
 ii moves[] = {{0,1},{0,-1},{1,0},{-1,0}};
 
 int n, m;
@@ -64,7 +66,7 @@ void updateMonsters(vector<vector<char>> &map) {
             int nextJ = front.second + moves[i].second;
 
             if (isPossible({nextI,nextJ})) {
-                if (map[nextI][nextJ] != '#') {
+                if (map[nextI][nextJ] == '.') {
                     map[nextI][nextJ] = 'M';
                     monsterQ.push({nextI, nextJ});
                 }
@@ -72,6 +74,34 @@ void updateMonsters(vector<vector<char>> &map) {
         }
     }
 
+    //    cout << endl;
+    // for (int i = 0; i < map.size(); i++) {
+    //     for (int j = 0; j < m; j++) {
+    //         cout << map[i][j];
+    //     }
+
+    //     cout << endl;
+    // }
+    // cout << endl;
+
+}
+
+void print(vector<vector<char>> &map, ii &start) {
+    stack<char> path;
+
+    while (!(goal.first == start.first && goal.second == start.second)) {
+        path.push(map[goal.first][goal.second]);
+        ii curr = {goal.first,goal.second};
+        goal.first += rev[map[curr.first][curr.second]].first;
+        goal.second += rev[map[curr.first][curr.second]].second;
+    }
+
+    cout << "YES" << endl << path.size() << endl;
+
+    while (!path.empty()) {
+        cout << path.top();
+        path.pop();
+    }
 }
 
 void bfs(vector<vector<char>> &map, ii start) {
@@ -81,39 +111,44 @@ void bfs(vector<vector<char>> &map, ii start) {
 
     while (!q.empty()) {
 
-        
-        ii front = q.front();
-        q.pop();
+        int size = q.size();
         updateMonsters(map);
 
-        cout << front.first << " " << front.second << endl;
+        for (int i = 0; i < size; i++) {
+            
+            ii front = q.front();
+            q.pop();
+            
+            if (front.first == 0 || front.second == 0 || front.first == n-1 || front.second == m-1) {
+                goal = {front.first,front.second};
+                break;
+            }
 
-        if (front.first == 0 || front.second == 0 || front.first == n-1 || front.second == m-1) {
-            goal = {front.first,front.second};
-            cout << "end";
-            break;
-        }
+            for (int i = 0; i < 4; i++) {
+                int nextI = front.first + moves[i].first;
+                int nextJ = front.second + moves[i].second;
 
-        for (int i = 0; i < 4; i++) {
-            int nextI = front.first + moves[i].first;
-            int nextJ = front.second + moves[i].second;
-
-            if (isPossible({nextI,nextJ})) {
-                if (map[nextI][nextJ] == '.') {
-                    map[nextI][nextJ] = dir[i];
-                    q.push({nextI, nextJ});
+                if (isPossible({nextI,nextJ})) {
+                    if (map[nextI][nextJ] == '.') {
+                        map[nextI][nextJ] = dir[i];
+                        q.push({nextI, nextJ});
+                    }
                 }
             }
+
         }
     }
 }
  
 int main() { _
     cin >> n >> m;
-    cout << n << m << endl; 
     vector<vector<char>> map(n,vector<char>(m,'.'));
     char a;
     ii start;
+    rev['R'] = {0,-1};
+    rev['L'] = {0,1};
+    rev['U'] = {1,0};
+    rev['D'] = {-1,0};
 
 
     for (int i = 0; i < n; i++) {
@@ -122,6 +157,8 @@ int main() { _
             map[i][j] = a;
             if (a == 'A')
                 start = {i,j};
+            if (a == 'M')
+                monsterQ.push({i,j});
         }
     }
 
@@ -129,17 +166,15 @@ int main() { _
 
     bfs(map, start);
 
-    cout << endl;
-    for (int i = 0; i < map.size(); i++) {
-        for (int j = 0; j < m; j++) {
-            cout << map[i][j];
-        }
-
-        cout << endl;
+    
+    if (goal.first != -1) {
+        print(map,start);
+    } else {
+        cout << "NO";
     }
-    cout << endl;
 
-    cout << goal.first << " "<< goal.second;
+ 
+
 
 
     return 0;
