@@ -74,15 +74,7 @@ void updateMonsters(vector<vector<char>> &map) {
         }
     }
 
-    //    cout << endl;
-    // for (int i = 0; i < map.size(); i++) {
-    //     for (int j = 0; j < m; j++) {
-    //         cout << map[i][j];
-    //     }
 
-    //     cout << endl;
-    // }
-    // cout << endl;
 
 }
 
