@@ -72,6 +72,7 @@ long makeSegmenTree(vector<u_int64_t> &nums, u_int64_t index, u_int64_t left, u_
     return st[index];
 }
 
+
 //0-2
 long find(u_int64_t left, u_int64_t right, u_int64_t targetL, u_int64_t targetR, u_int64_t index) { //2-4 //0,7  //0-3 // 2-3
     if (left > targetR || right < targetL) return MAXN;

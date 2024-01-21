@@ -76,6 +76,10 @@ void dijkstra(int V, int s) {
     }
 }
 
+void dijkstra() {
+    
+}
+
 int main() { _
 
 	return 0;
