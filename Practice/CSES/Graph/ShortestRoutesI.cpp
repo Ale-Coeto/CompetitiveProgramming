@@ -36,56 +36,51 @@
 using namespace std;
  
 typedef long long ll;
-typedef pair<int, int> ii;
-typedef vector<int> vi;
+typedef pair<ll, ll> ii;
+typedef vector<ll> vi;
 typedef vector<ii> vii;
  
-#define MAXN 1000005
+#define MAXN 10e5
 #define MOD 1000000007
+ 
+vector<vii> graph(MAXN);
+vector<bool> visited(MAXN, false);
+vi dist(MAXN, LLONG_MAX);
 
-vector<ii> graph[MAXN];
+void dijsktra(int n) {
+    priority_queue<ii, vector<ii>, greater<ii>> pq;
+    dist[n] = 0;
+    pq.push({0,n});
 
-void dijkstra(int V, int s) {
-	vi dist(V+1, INF); dist[s] = 0; // INF = 1B to avoid overflow 
-	priority_queue<ii, vector<ii>, greater<ii> > pq;
-    pq.push(ii(0, s)); 
-    
-    while (!pq.empty()) { // main loop
-	    ii front = pq.top(); 
-        pq.pop(); // greedy: get shortest unvisited vertex 
-	    int d = front.first, u = front.second;
-	    
-        if (d > dist[u]) continue; // this is a very important check 
-	    for (int j = 0; j < (int)graph[u].size(); j++) {
-	        ii v = graph[u][j]; // all outgoing edges from u 
-	        
-            if (dist[u] + v.second < dist[v.first]) {
-	            dist[v.first] = dist[u] + v.second; // relax operation
-	            pq.push(ii(dist[v.first], v.first));
-	        } 
-        } 
-    } 
-    // this variant can cause duplicate items in the priority queue
-    for (int i = 1; i < V+1; i++) {
-        cout << dist[i] << " ";
+    while (!pq.empty()) {
+        ii u = pq.top();
+        pq.pop();
+        if (visited[u.second]) continue;
+        visited[u.second] = true;
+
+        for (auto v : graph[u.second]) {
+            if (dist[u.second] + v.second < dist[v.first]) {
+                dist[v.first] = dist[u.second] + v.second;
+                pq.push({dist[v.first], v.first});
+            }
+        }
     }
 }
 
 int main() { _
-
-    int n, m;
+    int n, m, a, b, c;
     cin >> n >> m;
 
     while (m--) {
-        int a,b,c;
         cin >> a >> b >> c;
         graph[a].pb({b,c});
-        graph[b].pb({a,c});
     }
 
-    dijkstra(n,1);
+    dijsktra(1);
 
-
+    for (int i = 1; i <= n; i++) {
+        cout << dist[i] << " ";
+    }
 
     return 0;
 }
