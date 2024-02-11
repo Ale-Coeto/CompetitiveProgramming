@@ -43,6 +43,7 @@ typedef vector<ii> vii;
 #define MAXN 100000
 #define MOD 1000000007
  
+// Single source shortest paths
 
 vector<vii> graph(MAXN);
 vector<bool> visited(MAXN, false);
