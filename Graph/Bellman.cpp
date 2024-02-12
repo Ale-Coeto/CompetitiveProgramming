@@ -45,7 +45,7 @@ typedef vector<ii> vii;
 
 vector<vii> graph;
 vi dist; 
-//Dijkstra for neg nums
+//Dijkstra for neg nums (it fails if negative weight cycle)
 int bellmanFord(int V,int s) {
     
     for (int i = 0; i < V - 1; i++) // relax all E edges V-1 times
