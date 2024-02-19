@@ -56,7 +56,6 @@ string solve(int n) {
                     ans += 'a' + i - 1;
                     ans += 'a' + j - 1;
                     ans += 'a' + k - 1;
-                    // cout << i  << " " << j << " " << k;
                     return ans;
                 }
                 sum -= k;
