@@ -8,6 +8,7 @@
         "span": "cpp",
         "iosfwd": "cpp",
         "unordered_set": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "complex": "cpp"
     }
 }
