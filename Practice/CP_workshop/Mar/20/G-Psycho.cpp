@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string>
 #include <utility>
+#include <unordered_map>
 #include <vector>
  
 #define PI 3.141592653589793
@@ -40,14 +41,13 @@ typedef pair<int, int> ii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
  
-#define MAXN 1e7
+#define MAXN 10000001
 #define MOD 1000000007
  
 ll _sieve_size; 
 bitset<10000010> bs; 
 vi primes;
 
-//nlog(n)
 void sieve(ll upperbound) { 
     _sieve_size = upperbound + 1; 
     bs.set(); 
@@ -60,56 +60,61 @@ void sieve(ll upperbound) {
         } 
 }
 
-bool isPrime(ll N) { 
-    if (N <= _sieve_size) 
-        return bs[N]; 
+ll dp(MAXN);
 
-    for (int i = 0; i < (int)primes.size(); i++)
-        if (N % primes[i] == 0) return false;
-
-    return true; 
-}
-
-unordered_map<int,int> mp;
-vi primeFactors(ll N) { 
+void primeFactors(ll N) { 
     
-    vi factors;
+    unordered_map<int,int> mp;
+
     ll PF_idx = 0, PF = primes[PF_idx]; 
+
     while (PF * PF <= N) { 
         while (N % PF == 0) {
             N /= PF; 
-            factors.push_back(PF); 
+            
             mp[PF]++;
         } 
         PF = primes[++PF_idx];
     }
 
-    if (N != 1) 
-        factors.push_back(N); 
-    return factors; 
+    if (N != 1) {
+        mp[N]++;
+    }
+       
+    
+    int even = 0;
+    int odd = 0;
+
+    for (auto i : mp) {
+        if (i.second % 2 == 0)
+            even++;
+        else 
+            odd++;
+    }
+
+    if (even > odd) {
+        printf("Psycho Number\n");
+
+    } else {
+        printf("Ordinary Number\n");
+
+    }
+
 }
 
 
 int main() { _
+
     sieve(MAXN);
-    // for (int i : primes) {
-    //     cout << i << " ";
-    // }
 
-    // cout << primes.size();
-    vi x =  primeFactors(MAXN);
+    int n,a;
+    scanf("%d", &n);
 
-    for (auto i : mp) {
-        cout << i.first << " " << i.second << endl;
+
+    while (n--) {
+        scanf("%d", &a);
+        primeFactors(a);
     }
-
-    //even -> psycho
-    if ()
-    // cout << isPrime(21474836472) << endl;
-
-    // vi r = primeFactors(142391208960LL);
-    // for (vi::iterator i = r.begin(); i != r.end(); i++) 
-    //     cout << *i << " ";
         
  
 return 0;
