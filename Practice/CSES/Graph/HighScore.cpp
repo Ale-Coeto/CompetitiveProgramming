@@ -21,6 +21,8 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
  
 #define PI 3.141592653589793
 #define EPS 0.000000001
@@ -36,47 +38,60 @@
 using namespace std;
  
 typedef long long ll;
-typedef pair<int, int> ii;
-typedef vector<int> vi;
+typedef pair<ll, ll> ii;
+typedef vector<ll> vi;
 typedef vector<ii> vii;
  
-#define MAXN 10
+#define MAXN 2501
 #define MOD 1000000007
-
-vector<vii> graph;
+ 
+vector<vii> graph(MAXN);
 vi dist; 
-//Dijkstra for neg nums (it fails if negative weight cycle)
-int bellmanFord(int V,int s) {
-    dist.assign(V, INF);
+//Dijkstra for neg nums (it fails if negative weight cycle) s = source
+void bellmanFord(int V,int s) {
+    dist.assign(V+1, -INF);
     dist[s] = 0;
 
-    for (int i = 0; i < V - 1; i++) // relax all E edges V-1 times
-        for (int u = 0; u < V; u++) // these two loops = O(E), overall O(VE) 
+    for (int i = 0; i < V - 1; i++) {// relax all E edges V-1 times
+        for (int u = 1; u <= V; u++) {// these two loops = O(E), overall O(VE) 
             for (int j = 0; j < (int)graph[u].size(); j++) {
                 ii v = graph[u][j]; // record SP spanning here if needed
-                dist[v.first] = min(dist[v.first], dist[u] + v.second); // relax 
+                dist[v.first] = max(dist[v.first], dist[u] + v.second); // relax 
             }
+        }
+    }
+
 }
 
 bool checkNegativeCycles(int V) {
-    bool hasNegativeCycle = false;
-    for (int u = 0; u < V; u++) // one more pass to check
+
+    for (int u = 1; u <= V; u++) // one more pass to check
         for (int j = 0; j < (int)graph[u].size(); j++) {
             ii v = graph[u][j];
-            if (dist[v.first] > dist[u] + v.second) // if this is still possible
-                hasNegativeCycle = true; // then negative cycle exists! 
+            if (dist[v.first] < dist[u] + v.second) // if this is still possible
+                return true; // then negative cycle exists! 
         }
-    printf("Negative Cycle Exist? %s\n", hasNegativeCycle ? "Yes" : "No");
+
+    return false;
+
 }
 
 int main() { _
-
-    int V;
-    cin >> V;
-
-    int s = 1;
+    ll n, m, a, b, c;
+    cin >> n >> m;
     
 
+    for (int i = 0; i < m; i++) {
+        cin >> a >> b >> c;
+        graph[a].pb({b,c});
+    }
+
+    bellmanFord(n, 1);
+
+    if (checkNegativeCycles(n))
+        cout << -1 << endl;
+    else
+        cout << dist[n] << endl;
 
     return 0;
 }

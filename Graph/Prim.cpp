@@ -70,7 +70,7 @@ int main() { _
         if (!taken[u]) 
             mst_cost += w, process(u); 
     } 
-    printf("MST cost = %d (Prim’s)\n", mst_cost);
+    printf("MST cost = %d (Prim s)\n", mst_cost);
 
 return 0;
 }

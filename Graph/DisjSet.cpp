@@ -45,63 +45,49 @@ typedef vector<ii> vii;
 #define MAXN 10
 #define MOD 1000000007
 
-const int N = 210;
+class UnionFind{
+    private:
+        vector<int> parent;
+        vector<int> rank;
+        int numSets;
+    public:
+        UnionFind(int n){
+            rank.resize(n,0);
+            parent.resize(n,0);
+            for(int i=0;i<n;i++){
+                parent[i]=i;
+            }
+            numSets=n;
+        }
+        int findSet(int i){
+            return (parent[i]==i)?i : (parent[i]=findSet(parent[i]));
+        }
+        bool isSameSet(int i,int j){
+            return findSet(i) == findSet(j);
+        }
+        void unionSet(int i,int j){
+            if(!isSameSet(i,j)){
+                int pI = findSet(i);
+                int pJ = findSet(j);
+                if(rank[pI] > rank[pJ]){
+                    parent[pJ]=pI;
+                }
+                else{
+                    parent[pI]=pJ;
+                    if(rank[pI] == rank[pJ]){
+                        rank[pJ]++;
+                    }
+                }
+                numSets--;
+            }
+        }
+        int getNSets(){
+            return numSets;
+        }
+};
 
-int g[N][N];
-int parent[N];
-
-bool bfs(int start, int end) {
-  bool visited[N];
-  memset(visited, 0, sizeof(visited));
-
-  queue<int> q;
-  q.push(start);
-  visited[start] = true;
-  parent[start] = -1;
-
-  while(not q.empty()) {
-    int u = q.front();
-    q.pop();
-
-    for(int v = 0; v <= end; ++v) {
-      if(visited[v] or g[u][v] <= 0)
-        continue;
-
-      q.push(v);
-      parent[v] = u;
-      visited[v] = true;
-    }
-  }
-
-  return visited[end];
-}
-
-int ford_fulker(int start, int end) {
-  int u, v;
-  int max_flow = 0;
-
-  while(bfs(start, end)) {
-    int path_flow = INT_MAX;
-
-    for(v = end; v != start; v = parent[v]) {
-      u = parent[v];
-      path_flow = min(path_flow, g[u][v]);
-    }
-
-    for(v = end; v != start; v = parent[v]) {
-      u = parent[v];
-      g[u][v] -= path_flow;
-      g[v][u] += path_flow;
-    }
-
-    max_flow += path_flow;
-  }
-
-  return max_flow;
-}
 
 int main() { _
 
-//resp[r][c][0] = min()
     return 0;
 }

@@ -42,66 +42,53 @@ typedef pair<int, int> ii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
  
-#define MAXN 10
+#define MAXN 5001
 #define MOD 1000000007
 
-const int N = 210;
+vi graph[MAXN];
+vi visited(MAXN, -1);
 
-int g[N][N];
-int parent[N];
 
-bool bfs(int start, int end) {
-  bool visited[N];
-  memset(visited, 0, sizeof(visited));
+bool flag = false;
+void dfs(int u, int level, vector<bool> & visited, int head) {
+    if (flag || level > 2) return;
 
-  queue<int> q;
-  q.push(start);
-  visited[start] = true;
-  parent[start] = -1;
-
-  while(not q.empty()) {
-    int u = q.front();
-    q.pop();
-
-    for(int v = 0; v <= end; ++v) {
-      if(visited[v] or g[u][v] <= 0)
-        continue;
-
-      q.push(v);
-      parent[v] = u;
-      visited[v] = true;
-    }
-  }
-
-  return visited[end];
-}
-
-int ford_fulker(int start, int end) {
-  int u, v;
-  int max_flow = 0;
-
-  while(bfs(start, end)) {
-    int path_flow = INT_MAX;
-
-    for(v = end; v != start; v = parent[v]) {
-      u = parent[v];
-      path_flow = min(path_flow, g[u][v]);
+    visited[u] = true;
+    
+    for (int i = 0; i < (int)graph[u].size(); i++) {
+        if (!visited[graph[u][i]])
+            dfs(graph[u][i], level+1, visited, head);
+        else if (visited[graph[u][i]] && level == 2 && graph[u][i] == head) {
+            // cout << u << " " << graph[u][i] << level;
+            flag = true;
+        }
     }
 
-    for(v = end; v != start; v = parent[v]) {
-      u = parent[v];
-      g[u][v] -= path_flow;
-      g[v][u] += path_flow;
-    }
-
-    max_flow += path_flow;
-  }
-
-  return max_flow;
 }
 
 int main() { _
+    int n,a;
+    cin >> n;
 
-//resp[r][c][0] = min()
+    for (int i = 1; i <= n; i++) {
+        cin >> a;
+        graph[i].pb(a);
+    }
+
+    vector<bool> visited(n+1, false);
+    for (int i = 1; i <= n; i++) {
+        visited.assign(n+1, false);
+
+        dfs(i, 0, visited, i);
+
+        if (flag) {
+            cout << "YES" << endl;
+            return 0;
+        } 
+
+    }
+
+    cout << "NO" << endl;
+
     return 0;
 }

@@ -44,64 +44,45 @@ typedef vector<ii> vii;
  
 #define MAXN 10
 #define MOD 1000000007
+using ll = long long;
 
-const int N = 210;
+struct Node {
+  map<char, ll> next;
+  bool end = false;
+};
 
-int g[N][N];
-int parent[N];
+vector<Node> trie;
+ll trieSize = 0;
 
-bool bfs(int start, int end) {
-  bool visited[N];
-  memset(visited, 0, sizeof(visited));
-
-  queue<int> q;
-  q.push(start);
-  visited[start] = true;
-  parent[start] = -1;
-
-  while(not q.empty()) {
-    int u = q.front();
-    q.pop();
-
-    for(int v = 0; v <= end; ++v) {
-      if(visited[v] or g[u][v] <= 0)
-        continue;
-
-      q.push(v);
-      parent[v] = u;
-      visited[v] = true;
-    }
-  }
-
-  return visited[end];
+ll newNode() {
+  trie.push_back(Node());
+  return trieSize++;
 }
 
-int ford_fulker(int start, int end) {
-  int u, v;
-  int max_flow = 0;
+void add(string& s) {
+  ll pt = 0;
 
-  while(bfs(start, end)) {
-    int path_flow = INT_MAX;
+  for(ll i = 0; i < s.size(); i++) {
+    if(not trie[pt].next.count(s[i]))
+      trie[pt].next[s[i]] = newNode();
 
-    for(v = end; v != start; v = parent[v]) {
-      u = parent[v];
-      path_flow = min(path_flow, g[u][v]);
-    }
-
-    for(v = end; v != start; v = parent[v]) {
-      u = parent[v];
-      g[u][v] -= path_flow;
-      g[v][u] += path_flow;
-    }
-
-    max_flow += path_flow;
+    pt = trie[pt].next[s[i]];
   }
 
-  return max_flow;
+  trie[pt].end = true;
+}
+
+ll dfs(ll u, string& s, ll ps = 0) {
+  if(ps == s.size())
+    return u;
+
+  if(trie[u].next.count(s[ps]))
+    return dfs(trie[u].next[s[ps]], s, ps + 1);
+
+  return -1;
 }
 
 int main() { _
 
-//resp[r][c][0] = min()
     return 0;
 }
