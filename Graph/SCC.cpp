@@ -40,45 +40,53 @@ typedef pair<int, int> ii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
  
-#define MAXN 10
+#define MAXN 100
 #define MOD 1000000007
  
 vi dfs_num, dfs_low, S, visited; // global variables
-int dfsNumberCounter = 0, numSCC = 0;
-vector<vii> graph;
+int dfsNumberCounter, numSCC;
+vector<vii> graph(MAXN);
 enum TYPE { VISITED, UNVISITED };
 
 //Tarjan Algorithm for finding strongly connected components
+//If we pick any pair of vertices u and v in the SCC, we can find a path from u to v and vice versa.
 void tarjanSCC(int u) {
-    dfs_low[u] = dfs_num[u] = dfsNumberCounter++; // dfs_low[u] <= dfs_num[u] S.push_back(u); // stores u in a vector based on order of visitation visited[u] = 1;
+    dfs_low[u] = dfs_num[u] = dfsNumberCounter++; // dfs_low[u] <= dfs_num[u]
+    S.push_back(u); // stores u in a vector based on order of visitation
+    visited[u] = 1;
     
     for (int j = 0; j < (int)graph[u].size(); j++) {
         ii v = graph[u][j];
-
         if (dfs_num[v.first] == UNVISITED)
             tarjanSCC(v.first);
-
         if (visited[v.first]) // condition for update
             dfs_low[u] = min(dfs_low[u], dfs_low[v.first]); 
     }
-    
-    if (dfs_low[u] == dfs_num[u]) { // if this is a root (start) of an SCC printf("SCC %d:", ++numSCC); // this part is done after recursion 
-        numSCC++;
+
+    if (dfs_low[u] == dfs_num[u]) { // if this is a root (start) of an SCC
+        printf("SCC %d:", ++numSCC); // this part is done after recursion
         while (1) {
-            int v = S.back(); 
-            S.pop_back(); 
-            visited[v] = 0; 
-            cout << v << " ";
+            int v = S.back(); S.pop_back(); visited[v] = 0;
+            printf(" %d", v);
             if (u == v) break; 
         }
-    }
-    
+        printf("\n");
+    } 
 }
 
 
 int main() { _
-    int v;
-    cin >> v;
+    int v, m;
+    cin >> v >> m;
+    int a,b;
+
+    for (int i = 0; i < m; i++) {
+        cin >> a >> b;
+        graph[a].pb({b,0});
+        graph[b].pb({a,0});
+    }
+
+    dfsNumberCounter = numSCC = 0;
 
     dfs_num.assign(v, UNVISITED); 
     dfs_low.assign(v, 0); 

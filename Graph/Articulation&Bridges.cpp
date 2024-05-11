@@ -40,10 +40,10 @@ typedef pair<int, int> ii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
  
-#define MAXN 10
+#define MAXN 100
 #define MOD 1000000007
 
-vector<vii> graph;
+vector<vii> graph(MAXN);
 vi articulationVertex;
 vi dfsLow, dfsNum, dfsParent;
 enum state {
@@ -51,73 +51,65 @@ enum state {
 };
 int dfsCounter = 0, dfsRoot = 0, rootChildren = 0;
 
-int articulationPoint(int u) {
-    dfsLow[u] = dfsNum[u] = dfsCounter++; // dfs_low[u] <= dfs_num[u] 
+// An ‘Articulation Point’ is defined as a vertex in a graph G whose removal disconnects G.
+// a ‘Bridge’ is defined as an edge in a graph G whose removal disconnects G.
+
+
+void articulationPointAndBridge(int u) {
+    dfsLow[u] = dfsNum[u] = dfsCounter++; // dfs_low[u] <= dfsNum[u]
     for (int j = 0; j < (int)graph[u].size(); j++) {
         ii v = graph[u][j];
+
         if (dfsNum[v.first] == UNVISITED) { // a tree edge
             dfsParent[v.first] = u;
-
             if (u == dfsRoot) rootChildren++; // special case if u is a root
-            
-            articulationPoint(v.first);
+                articulationPointAndBridge(v.first);
 
-            if (dfsLow[v.first] >= dfsNum[u]) 
-                articulationVertex[u] = true;
+            if (dfsLow[v.first] >= dfsNum[u]) // for articulation point
+                articulationVertex[u] = true; // store this information first
 
-            dfsLow[u] = min(dfsLow[u], dfsLow[v.first]); // update dfs_low[u] 
-            }
-            else if (v.first != dfsParent[u]) // a back edge and not direct cycle 
-                dfsLow[u] = min(dfsLow[u], dfsNum[v.first]); // update dfs_low[u]
-    }
-}
-
-int bridge(int u) {
-    dfsLow[u] = dfsNum[u] = dfsCounter++; // dfs_low[u] <= dfs_num[u] 
-    for (int j = 0; j < (int)graph[u].size(); j++) {
-        ii v = graph[u][j];
-        if (dfsNum[v.first] == UNVISITED) { // a tree edge
-            dfsParent[v.first] = u;
-
-            if (u == dfsRoot) rootChildren++; // special case if u is a root
-            
-            bridge(v.first);
-             
-            // for articulation point // store this information first // for bridge
-            if (dfsLow[v.first] > dfsNum[u])
+            if (dfsLow[v.first] > dfsNum[u]) // for bridge
                 printf(" Edge (%d, %d) is a bridge\n", u, v.first);
 
-            dfsLow[u] = min(dfsLow[u], dfsLow[v.first]); // update dfs_low[u] 
-            }
-            else if (v.first != dfsParent[u]) // a back edge and not direct cycle 
-                dfsLow[u] = min(dfsLow[u], dfsNum[v.first]); // update dfs_low[u]
-    }
+            dfsLow[u] = min(dfsLow[u], dfsLow[v.first]); // update dfsLow[u]
+
+        } else if (v.first != dfsParent[u]) {// a back edge and not direct cycle
+            dfsLow[u] = min(dfsLow[u], dfsNum[v.first]); // update dfsLow[u]
+        }
+    } 
 }
 
-
-
 int main() { _
-    int V;
-    cin >> V;
+    int V, m;
+    int a,b;
+
+    cin >> V >> m;
+    for (int i = 0; i < m; i++) {
+        cin >> a >> b;
+        graph[a].pb({b,0});
+        graph[b].pb({a,0});
+    }
 
     dfsNum.assign(V, UNVISITED); 
     dfsLow.assign(V, 0); 
     dfsParent.assign(V, 0); 
     articulationVertex.assign(V, 0);
 
+    printf("Bridges:\n");
     for (int i = 0; i < V; i++) {
         if (dfsNum[i] == UNVISITED) {
-            dfsRoot = i; 
-            rootChildren = 0; 
-            articulationPoint(i); 
-            //bridges(i);
-            articulationVertex[dfsRoot] = (rootChildren > 1); 
-        }
+            dfsRoot = i; rootChildren = 0; 
+            articulationPointAndBridge(i);
+            articulationVertex[dfsRoot] = (rootChildren > 1);
+        } // special case
+        
     }
 
-    //Print bridges 
-    for (int i = 0; i < V; i++)
+    printf("Articulation Points:\n");
+    for (int i = 0; i < V; i++) {
         if (articulationVertex[i])
-            cout << i << " : " << articulationVertex[i] << endl;
+            printf(" Vertex %d\n", i);
+    }
+
     return 0;
 }
