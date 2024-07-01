@@ -3,12 +3,14 @@ import java.util.*;
 
 public class Java {
     public static void main(String[]args){
-
+        
+        // General
         ArrayList<Integer> uno = new ArrayList<>();
         uno.add(21);
         uno.add(1);
         Collections.sort(uno, Collections.reverseOrder());
 
+        // Double ended queue
         Deque<Integer> dq = new ArrayDeque<>();
         dq.addFirst(0);
         dq.addLast(1);
@@ -36,23 +38,21 @@ public class Java {
         sum = sum.remainder(V);
         sum = sum.mod(V);
 
-        
+        // Transform types
         String m = sum.toString(10);
         System.out.println(V);
         int F = 2;
         sum.divide(BigInteger.valueOf(F));
-
+        
+        // Other operations
         if (V.isProbablePrime(10))
-        System.out.println("is prime");
-
+            System.out.println("is prime");
+        
         V = V.gcd(BigInteger.valueOf(1000));
 
 
         scan.close();
 
-        
-
-    
 
     }
 }
