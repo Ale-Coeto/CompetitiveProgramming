@@ -104,7 +104,6 @@ int main() { _
     }
 
     //even -> psycho
-    if ()
     // cout << isPrime(21474836472) << endl;
 
     // vi r = primeFactors(142391208960LL);
