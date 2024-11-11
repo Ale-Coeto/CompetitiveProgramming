@@ -36,11 +36,11 @@
 using namespace std;
  
 typedef long long ll;
-typedef pair<int, int> ii;
+typedef pair<ll, ll> ii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
  
-#define MAXN 100000
+#define MAXN 10e5
 #define MOD 1000000007
  
 // Single source shortest paths
@@ -48,7 +48,7 @@ typedef vector<ii> vii;
 vector<vii> graph(MAXN);
 vector<bool> visited(MAXN, false);
 vector<int> path(MAXN);
-vi dist(MAXN, INF);
+vi dist(MAXN, LLONG_MAX);
 
 // Careful with long long & infinite val
 void dijkstra(int n) {

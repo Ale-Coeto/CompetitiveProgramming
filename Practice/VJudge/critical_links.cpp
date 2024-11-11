@@ -77,16 +77,41 @@ void findBridges(vector<vi> & graph, vii & bridges, int u) {
     } 
 
 }
+
  
 int main() { _
+    int n,a,b,t;
+    char c;
 
-    int n;
-    
-    vector<vi> graph(n+1);
-    dfsNum.assign(n, 0); 
-    dfsLow.assign(n, 0); 
-    dfsParent.assign(n, 0); 
-    vii bridges;
+    while (cin >> n) {
+
+        vector<vi> graph(n+1);
+        dfsNum.assign(n, 0); 
+        dfsLow.assign(n, 0); 
+        dfsParent.assign(n, 0); 
+        vii bridges;
+
+        for (int i = 0; i < n; i++) {
+            cin >> a >> c >> t >> c;
+            while (t--) {
+                cin >> b;
+                graph[a].pb(b);
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            findBridges(graph, bridges, i);
+        }
+
+        cout << bridges.size() << " critical links" << endl;
+        sort(bridges.begin(), bridges.end());
+
+        for (auto x : bridges) {
+            cout << min(x.first,x.second) << " - " << max(x.first, x.second) << endl;
+        }
+        cout << endl;
+        // cin >> c;
+    }
 
     return 0;
 }

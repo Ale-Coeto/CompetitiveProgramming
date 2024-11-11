@@ -45,11 +45,12 @@ typedef vector<ii> vii;
 #define MAXN 10
 #define MOD 1000000007
 
-const int N = 210;
+const int N = 210; //Max num of nodes
 
-int g[N][N];
+int g[N][N]; //Capacity of each edge
 int parent[N];
 
+//Used to find an augmenting path from the start node to the end node in the residual graph.
 bool bfs(int start, int end) {
   bool visited[N];
   memset(visited, 0, sizeof(visited));
