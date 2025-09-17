@@ -44,31 +44,33 @@ typedef vector<ii> vii;
  
 #define MAXN 10
 #define MOD 1000000007
- 
+
 int main() { _
-    int n, a;
+    int n;
     cin >> n;
-    unordered_set<int> nums;
-    for (int i = 1; i <= n; i++) {
-        cin >> a;
-        if (nums.find(i*-1) == nums.end()) {
-            nums.insert(i);
-        } 
 
-        if (nums.find(a) != nums.end()) {
-            nums.erase(a);
-        } else {
-            nums.insert(a*-1);
-        }
+    if (n == 2 || n == 3) {
+        cout << "NO SOLUTION" << endl;
+        return 0;
     }
 
-    if (nums.find(n) != nums.end()) {
-        nums.erase(a);
-    } 
 
-    for (auto i : nums) {
-        if (i > 0) cout << i << endl;
+    for (int i = 2; i <= n; i+=2) {
+        cout << i << " ";
     }
+
+    for (int i = 1; i <= n; i+=2) {
+        cout << i << " ";
+    }
+
     
+
     return 0;
 }
+
+// 5
+// 1 3 5 2 4
+// 3
+// 1 3 
+// 7
+// 1 3 5 7 2 4 6

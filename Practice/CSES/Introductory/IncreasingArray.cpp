@@ -21,6 +21,8 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
  
 #define PI 3.141592653589793
 #define EPS 0.000000001
@@ -44,27 +46,23 @@ typedef vector<ii> vii;
 #define MOD 1000000007
  
 int main() { _
-
-    uint64_t n,b;
+    int n, a;
+    long long ans = 0;
+    cin >> n;
     vector<int> nums;
 
-    cin >> n;
-
     while (n--) {
-        cin >> b;
-        nums.push_back(b);
+        cin >> a;
+        nums.pb(a);
     }
 
-    long long count = 0;
-    for (int i = 1; i < nums.size(); i++) {
-        if (nums[i-1] - nums[i] > 0) {
-            count += nums[i-1] - nums[i];
+    for (int i = 1; i < (int)nums.size(); i++) {
+        if (nums[i] < nums[i-1]) {
+            ans += nums[i-1] - nums[i];
             nums[i] = nums[i-1];
         }
-        
     }
 
-    cout << count;
-    
+    cout << ans;
     return 0;
 }

@@ -21,6 +21,8 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
  
 #define PI 3.141592653589793
 #define EPS 0.000000001
@@ -44,19 +46,17 @@ typedef vector<ii> vii;
 #define MOD 1000000007
  
 int main() { _
-
-    uint64_t n;
+    long long n;
     cin >> n;
-    cout << n;
-    while (n!=1) {
-        if (n%2 == 0) 
+
+    while (n > 1) {
+        cout << n << " ";
+        if (n % 2 == 0) {
             n /= 2;
-        else    
-            n = n*3 + 1;
-
-        cout << " " << n;
+        } else {
+            n = (n * 3) + 1;
+        }
     }
-
- 
-return 0;
+    cout << n;
+    return 0;
 }

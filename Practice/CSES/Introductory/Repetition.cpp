@@ -21,6 +21,8 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
  
 #define PI 3.141592653589793
 #define EPS 0.000000001
@@ -44,27 +46,20 @@ typedef vector<ii> vii;
 #define MOD 1000000007
  
 int main() { _
+    string input;
+    cin >> input;
+    int ans = 1;
+    int curr = -1;
+    int sz = (int)input.size();
 
-string input;
-cin >> input;
-
-int low = 0, high = 1;
-int ans = 1;
-int temp = 1;
-
-while (high < input.length()) {
-    if (input[low] == input[high]) {
-        temp++;
-    } else {
-        low = high;
-        ans = max(temp,ans);
-        temp = 1;
+    for (int i = 1; i < sz; i++) {
+        if (input[i] == input[i-1]) {
+            ans = max(ans, i - curr);
+        } else {
+            curr = i-1;
+        }
     }
-    high++;
-}
 
-cout << max(ans,temp);
-
- 
-return 0;
+    cout << ans;
+    return 0;
 }
