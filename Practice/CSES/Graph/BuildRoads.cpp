@@ -21,6 +21,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <unordered_set>
  
 #define PI 3.141592653589793
 #define EPS 0.000000001
@@ -43,51 +44,44 @@ typedef vector<ii> vii;
 #define MAXN 1000005
 #define MOD 1000000007
 
-int n, m;
-vi graph[MAXN];
-vi visited(MAXN, -1);
+vector<vi> graph(1000000);
 
- 
-void dfs(int u) {
-    visited[u] = 1;
+void dfs(int n, vector<bool> & visited, unordered_set<int> & groups) {
+    visited[n] = true;
 
-    for (int i = 0; i < (int)graph[u].size(); i++) {
-        if (visited[graph[u][i]] == -1)
-            dfs(graph[u][i]);
+    for (int u : graph[n]) {
+        if (!visited[u])
+            dfs(u, visited, groups);
     }
 }
 
-int main() { _
+int main() {
+    int n,m,a,b;
     cin >> n >> m;
-
-    for (int i = 0; i < m; i++) {
-        int a,b;
+    while (m--) {
         cin >> a >> b;
         graph[a].pb(b);
         graph[b].pb(a);
     }
 
-
-    int count = 0;
-    queue<int> groups;
-
+    vector<bool> visited(graph.size());
+    unordered_set<int> groups;
     for (int i = 1; i <= n; i++) {
-        if (visited[i] == -1) {
-            dfs(i);
-            groups.push(i);
-            count++;
+        if (!visited[i]) {
+            groups.insert(i);
+            dfs(i, visited, groups);
         }
     }
 
-
-    cout << count-1 << endl;
-    while (groups.size() > 1) {
-        cout << groups.front() << " ";
-        groups.pop();
-        cout << groups.front() << endl;
+    vector<int> sol;
+    for (auto x : groups) {
+        sol.pb(x);
     }
 
+    cout << (int)sol.size()-1 << endl;
 
-
-return 0;
+    for (int i = 1; i < (int)sol.size(); i++) {
+        cout << sol[0] << " " << sol[i] << endl;
+    }
+    return 0;
 }

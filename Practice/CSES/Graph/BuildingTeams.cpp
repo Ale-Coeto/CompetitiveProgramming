@@ -43,63 +43,51 @@ typedef vector<ii> vii;
 #define MAXN 1000005
 #define MOD 1000000007
 
-int n,m;
-vector<u_int64_t> graph[MAXN];
-vi visited(MAXN,-1);
-int num = 1;
- 
-string bfs(u_int64_t u) {
-    visited[u] = 0;
-    queue<int> q;
-    q.push(u);
+vector<vi> graph(100000);
+vector<int> colors(100000);
 
-    
-    while(!q.empty()) {
-        int f = q.front();
+bool bfs(int n) {
+    queue<int> q;
+    q.push(n);
+    colors[n] = 1;
+
+    while (!q.empty()) {
+        int front = q.front();
         q.pop();
 
-        for (int i = 0; i < (int)graph[f].size(); i++) {
-            if (visited[f] == visited[graph[f][i]]) 
-                return "IMPOSSIBLE";
-
-            if (visited[graph[f][i]] == -1) {
-                visited[graph[f][i]] = 1 - visited[f];
-                q.push(graph[f][i]);
-                
-            } 
-        }
-    }
-
-    return "";
-
-}
-
-int main() { _
-    cin >> n >> m;
-
-    while (m--) {
-        u_int64_t a,b;
-        cin >> a >> b;
-        graph[a].pb(b);
-        graph[b].pb(a);
-
-    }
-
-    string res;
-    for (int i = 1; i <= n; i++) {
-        if (visited[i] == -1) {
-            res = bfs(i);
-            if (res == "IMPOSSIBLE") {
-                cout << res;
-                return 0;
+        for (int x : graph[front]) {
+            if (!colors[x]) {
+                q.push(x);
+                colors[x] = colors[front] == 1 ? 2 : 1;
+            } else if (colors[x] == colors[front]) {
+                cout << "IMPOSSIBLE" << endl;
+                return false;
             }
         }
     }
 
-    for (int i = 1; i <= n; i++) {
-        int n = visited[i];
-        cout << ((n >= 1) ? 1 : 2) << " ";
+    return true;
+}
+
+int main() { _
+    int n,m,a,b;
+    cin >> n >> m;
+    while (m--) {
+        cin >> a >> b;
+        graph[a].pb(b);
+        graph[b].pb(a);
     }
 
+    for (int i = 1; i <= n; i++) {
+        bool attempt = true;
+        if (!colors[i]) {
+            attempt = bfs(i);
+        }
+        if (!attempt) return 0;
+    }
+
+    for (int i = 1; i <= n; i++) {
+        cout << colors[i] << " ";
+    }
     return 0;
 }
