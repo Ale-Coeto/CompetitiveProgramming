@@ -21,6 +21,8 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
  
 #define PI 3.141592653589793
 #define EPS 0.000000001
@@ -36,66 +38,77 @@
 using namespace std;
  
 typedef long long ll;
-typedef pair<ll, ll> ii;
-typedef vector<ll> vi;
+typedef pair<int, int> ii;
+typedef vector<int> vi;
 typedef vector<ii> vii;
  
-#define MAXN 10e5
+#define MAXN 10
 #define MOD 1000000007
+ 
+vector<vi> graph(1000000);
+vector<bool> visited(1000000, false);
+vector<bool> recStack(1000000, false);
+vi sol;
+bool impossible = false;
 
-vector<vector<ii>> graph(MAXN); // graph[a] = (b,w)
-vector<bool> visited(MAXN, false);
-vi distances(MAXN, LLONG_MAX);
-vi path(MAXN);
+bool hasCycle(int n) {
+    visited[n] = true;
+    recStack[n] = true;
 
-void dijkstra(int n) {
-    priority_queue<ii, vii, greater<ii>> pq;
-    pq.push({0, n});
-    distances[n] = 0;
-
-    while (!pq.empty()) {
-        ii top = pq.top();
-        ll u = top.second;
-        pq.pop();
-        visited[u] = true;
-
-        for (ii x : graph[u]) {
-            if (!visited[x.first]) {
-                if (distances[u] + x.second < distances[x.first]) {
-                    distances[x.first] = distances[u] + x.second;
-                    path[x.first] = u;
-                    pq.push({distances[x.first], x.first});
-                }
+    for (auto x : graph[n]) {
+        if (!visited[x]) {
+            if (hasCycle(x)) {
+                return true;
             }
-        }
-
+        } else if(recStack[x]) {
+            return true;
+        }   
     }
+
+    recStack[n] = false;
+    return false;
+}
+
+void dfs(int n) {
+    visited[n] = true;
+
+    for (auto x : graph[n]) {
+        if (!visited[x]) {
+            dfs(x);
+        }
+    }
+
+    sol.pb(n);
 }
 
 int main() { _
-    int n,m,a,b,w;
-
+    int n,m,a,b;
     cin >> n >> m;
 
-    map<ii, ll> mp;
-
     while (m--) {
-        cin >> a >> b >> w;
-        if (!mp[{a,b}] || (w < mp[{a,b}])) {
-            mp[{a,b}] = w;
+        cin >> a >> b;
+        graph[a].pb(b);
+    }
+
+    for (int i = 1; i <= n; i++) {
+        if (!visited[i] && hasCycle(i)) {
+            cout << "IMPOSSIBLE" << endl;
+            return 0;
         }
     }
 
-    for (auto x : mp) {
-        graph[x.first.first].pb({x.first.second, x.second});
-    }
-
-    dijkstra(1);
-
+    visited = vector<bool>(n+1, false);
     for (int i = 1; i <= n; i++) {
-        cout << distances[i] << " ";
+        if (!visited[i]) {
+            dfs(i);
+        }
     }
-    cout << endl;
+
+    reverse(sol.begin(), sol.end());
+
+    for (auto x : sol) {
+        cout << x << " ";
+    }
 
     return 0;
 }
